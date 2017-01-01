@@ -1,0 +1,13 @@
+# Generated Debug/User files.
+*.iobj
+*.ipdb
+*.pdb
+*.db
+*.opendb
+*.vcxproj.user
+Solution/ipch/*
+Solution/.vs/*
+Solution/Debug/*
+Solution/Release/*
+Solution/x64/*
+Solution/x86/*
