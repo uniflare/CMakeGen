@@ -35,13 +35,15 @@ void CMakeGen::GenerateCMakeList(std::string source_dir)
 			std::string relativePath = (fullPath == source_dir) ? "" : fullPath.substr(source_dir.length() + 1, fullPath.length() - source_dir.length());
 			std::string VSFilter = (relativePath.empty())? "Main" : relativePath;
 			std::string SourceGroupName((relativePath != "")? relativePath : "Main");
-				SourceGroupName.erase(std::remove(SourceGroupName.begin(), SourceGroupName.end(), '\\'), SourceGroupName.end());
+			SourceGroupName.erase(std::remove(SourceGroupName.begin(), SourceGroupName.end(), '\\'), SourceGroupName.end());
 
 			// Set the Visual Studio Explorer Filter
+			std::replace(VSFilter.begin(), VSFilter.end(), '\\', '/');
 			if (VSFilterGroups.count(SourceGroupName) == 0)
 				VSFilterGroups[SourceGroupName] = VSFilter;
 
-			// Add this source file to the array
+			// Add this source file to the source group array
+			std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
 			sources[SourceGroupName].emplace_back(relativePath + ((relativePath.length() > 0) ? "/" : "") + fileName);
 		}
 	}
@@ -99,7 +101,7 @@ void CMakeGen::GenerateCMakeList(std::string source_dir)
 		return;
 	}
 
-	CMakeContent.replace(pos, 24, CMakeSourceData);
+	CMakeContent.replace(pos, 20, CMakeSourceData);
 
 	// Normalize line endings...
 	CMakeContent.erase(std::remove(CMakeContent.begin(), CMakeContent.end(), '\r'), CMakeContent.end());
