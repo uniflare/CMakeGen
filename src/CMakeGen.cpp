@@ -35,8 +35,16 @@ void CMakeGen::GenerateCMakeList(std::string source_dir)
 			std::string SourceGroupName((relativePath != "")? relativePath : "Main");
 			SourceGroupName.erase(std::remove(SourceGroupName.begin(), SourceGroupName.end(), '\\'), SourceGroupName.end());
 
-			// Set the Visual Studio Explorer Filter
-			std::replace(VSFilter.begin(), VSFilter.end(), '\\', '/');
+			
+			
+			//Adds double backslash to source group text in order to clean up visual studio internal filters
+			auto it = std::find(VSFilter.begin(), VSFilter.end(), '\\');
+			while (it != VSFilter.end()) {
+				auto it2 = VSFilter.insert(it, '\\');
+
+				it = std::find(it2 + 2, VSFilter.end(), '\\');
+			}
+
 			if (VSFilterGroups.count(SourceGroupName) == 0)
 				VSFilterGroups[SourceGroupName] = VSFilter;
 
